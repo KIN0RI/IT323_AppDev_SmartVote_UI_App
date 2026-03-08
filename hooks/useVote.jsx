@@ -1,8 +1,5 @@
-// src/hooks/useVote.jsx
-// Same logic as web — useNavigate replaced with useNavigation
-
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import useCandidates from './useCandidates';
 
 const positions = [
@@ -14,7 +11,6 @@ const positions = [
 ];
 
 function useVote() {
-  const navigation = useNavigation();
   const { candidates, castVote } = useCandidates();
   const [step, setStep] = useState(0);
   const [votedChoices, setVotedChoices] = useState([]);
@@ -37,8 +33,11 @@ function useVote() {
     setStep(nextStep);
 
     if (nextStep >= positions.length) {
-      // Same screen name as web route /VoteAnalysis
-      navigation.navigate('VoteAnalysis', { votes: newChoices });
+      // Pass votes as JSON string — expo-router params must be strings
+      router.push({
+        pathname: '/vote-analysis',
+        params: { votes: JSON.stringify(newChoices) },
+      });
     }
   };
 

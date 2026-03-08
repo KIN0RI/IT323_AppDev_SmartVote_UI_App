@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
@@ -8,7 +8,6 @@ import {
 import { colors, font, radius, spacing } from '../constants/theme';
 
 function RegisterScreen() {
-  const navigation = useNavigation();
   const [form, setForm] = useState({
     name: '', studentId: '', email: '', password: '',
   });
@@ -30,7 +29,7 @@ function RegisterScreen() {
         <Text style={styles.successIcon}>🎉</Text>
         <Text style={styles.successTitle}>Registration Complete!</Text>
         <Text style={styles.successSub}>You can now log in to cast your vote.</Text>
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.btn} onPress={() => router.replace('/login')}>
           <Text style={styles.btnText}>Back to Login</Text>
         </TouchableOpacity>
       </View>
@@ -70,7 +69,7 @@ function RegisterScreen() {
           <Text style={styles.btnText}>Register</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => router.replace('/login')}>
           <Text style={styles.linkText}>
             Already have an account? <Text style={styles.link}>Sign in here</Text>
           </Text>

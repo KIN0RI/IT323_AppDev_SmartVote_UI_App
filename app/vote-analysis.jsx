@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { router, useLocalSearchParams } from 'expo-router';
 import {
   ScrollView, StyleSheet,
   Text, TouchableOpacity,
@@ -7,9 +7,15 @@ import {
 import { colors, font, radius, spacing } from '../constants/theme';
 
 function VoteAnalysisScreen() {
-  const navigation = useNavigation();
-  const route      = useRoute();
-  const votes      = route.params?.votes || [];
+  const params = useLocalSearchParams();
+
+  // votes are passed as a JSON string via router.push params
+  let votes = [];
+  try {
+    votes = params.votes ? JSON.parse(params.votes) : [];
+  } catch {
+    votes = [];
+  }
 
   if (votes.length === 0) {
     return (
@@ -17,7 +23,7 @@ function VoteAnalysisScreen() {
         <Text style={styles.emptyIcon}>⚠️</Text>
         <Text style={styles.emptyTitle}>No vote data found</Text>
         <Text style={styles.emptySub}>Please go back and cast your vote first.</Text>
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Vote')}>
+        <TouchableOpacity style={styles.btn} onPress={() => router.push('/vote')}>
           <Text style={styles.btnText}>Go to Vote Page</Text>
         </TouchableOpacity>
       </View>
@@ -47,7 +53,7 @@ function VoteAnalysisScreen() {
         ))}
       </View>
 
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('StudentDashboard')}>
+      <TouchableOpacity style={styles.btn} onPress={() => router.replace('/student-dashboard')}>
         <Text style={styles.btnText}>Back to Dashboard</Text>
       </TouchableOpacity>
     </ScrollView>

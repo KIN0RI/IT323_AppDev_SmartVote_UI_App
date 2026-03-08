@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React from 'react';
 import {
   ScrollView, StyleSheet,
@@ -10,7 +10,6 @@ import { colors, font, radius, spacing } from '../constants/theme';
 import useProfile from '../hooks/useProfile';
 
 function ProfileScreen() {
-  const navigation = useNavigation();
   const [roleState, setRoleState] = React.useState('student');
 
   React.useEffect(() => {
@@ -87,7 +86,7 @@ function ProfileScreen() {
               <TouchableOpacity style={styles.btn} onPress={handleEdit}>
                 <Text style={styles.btnText}>Edit Profile</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.goBack()}>
+              <TouchableOpacity style={styles.outlineBtn} onPress={() => router.back()}>
                 <Text style={styles.outlineBtnText}>Go Back</Text>
               </TouchableOpacity>
             </View>

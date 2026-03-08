@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
@@ -17,13 +17,12 @@ const announcements = [
 ];
 
 function StudentDashboardScreen() {
-  const navigation = useNavigation();
   const [electionStatus] = useState('Voting is Open');
   const [hasVoted]       = useState(false);
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userRole');
-    navigation.navigate('Login');
+    router.replace('/login');
   };
 
   return (
@@ -81,7 +80,7 @@ function StudentDashboardScreen() {
 
           <TouchableOpacity
             style={[styles.voteBtn, (electionStatus !== 'Voting is Open' || hasVoted) && styles.voteBtnDisabled]}
-            onPress={() => navigation.navigate('Vote')}
+            onPress={() => router.push('/vote')}
             disabled={electionStatus !== 'Voting is Open' || hasVoted}
           >
             <Text style={styles.voteBtnText}>
@@ -90,7 +89,7 @@ function StudentDashboardScreen() {
           </TouchableOpacity>
 
           {hasVoted && (
-            <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.navigate('VoteAnalysis')}>
+            <TouchableOpacity style={styles.outlineBtn} onPress={() => router.push('/vote-analysis')}>
               <Text style={styles.outlineBtnText}>View My Votes</Text>
             </TouchableOpacity>
           )}
@@ -98,10 +97,10 @@ function StudentDashboardScreen() {
 
         {/* Quick links */}
         <View style={styles.quickLinks}>
-          <TouchableOpacity style={styles.quickBtn} onPress={() => navigation.navigate('Results')}>
+          <TouchableOpacity style={styles.quickBtn} onPress={() => router.push('/results')}>
             <Text style={styles.quickBtnText}>🏆 View Results</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.quickBtn} onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity style={styles.quickBtn} onPress={() => router.push('/profile')}>
             <Text style={styles.quickBtnText}>👤 My Profile</Text>
           </TouchableOpacity>
         </View>

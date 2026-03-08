@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
@@ -19,15 +19,23 @@ const insights = [
 const electionStats = { totalVoters: 2000, votesCast: 1895, remainingVoters: 105 };
 
 const adminLinks = [
-  { label: '📋 Voter Log',          screen: 'VoterLog'         },
-  { label: '👥 Manage Candidates',  screen: 'ManageCandidates' },
-  { label: '⚙️ Election Settings',  screen: 'ElectionSettings' },
-  { label: '🏆 Results',            screen: 'Results'          },
+  { label: '📋 Voter Log',         screen: '/voter-log'         },
+  { label: '👥 Manage Candidates', screen: '/manage-candidates' },
+  { label: '⚙️ Election Settings', screen: '/election-settings' },
+  { label: '🏆 Results',           screen: '/results'           },
 ];
 
+function ProgressBar({ percent, color = colors.primary }) {
+  return (
+    <View style={styles.progressTrack}>
+      <View style={[styles.progressFill, { flex: percent / 100, backgroundColor: color }]} />
+      <View style={{ flex: 1 - percent / 100 }} />
+    </View>
+  );
+}
+
 function AdminDashboardScreen() {
-  const navigation        = useNavigation();
-  const { candidates }    = useCandidates();
+  const { candidates }   = useCandidates();
   const [activePosition, setActivePosition] = useState('President');
   const [showInsights,   setShowInsights]   = useState(false);
 
@@ -37,7 +45,7 @@ function AdminDashboardScreen() {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userRole');
-    navigation.navigate('Login');
+    router.replace('/login');
   };
 
   return (
@@ -62,11 +70,10 @@ function AdminDashboardScreen() {
             <Text style={styles.progressText}>Voter Turnout</Text>
             <Text style={styles.progressPercent}>{turnoutPercent}%</Text>
           </View>
-          <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, { width: `${turnoutPercent}%` }]} />
-          </View>
+          <ProgressBar percent={turnoutPercent} color={colors.primary} />
         </View>
 
+        {/* Stat cards */}
         <View style={styles.statsRow}>
           {[
             { icon: '👥', label: 'Total Voters', value: electionStats.totalVoters.toLocaleString() },
@@ -81,18 +88,18 @@ function AdminDashboardScreen() {
           ))}
         </View>
 
+        {/* Quick links */}
         <View style={styles.quickGrid}>
           {adminLinks.map(({ label, screen }) => (
-            <TouchableOpacity key={screen} style={styles.quickBtn} onPress={() => navigation.navigate(screen)}>
+            <TouchableOpacity key={screen} style={styles.quickBtn} onPress={() => router.push(screen)}>
               <Text style={styles.quickBtnText}>{label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
-
+        {/* Vote tally */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Candidate Vote Tally</Text>
-
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
             <View style={styles.tabsRow}>
               {positions.map((pos) => (
@@ -113,9 +120,7 @@ function AdminDashboardScreen() {
               <View key={c.id} style={styles.candidateRow}>
                 <View style={styles.candidateRowLeft}>
                   <Text style={styles.candidateRowName}>{c.name}</Text>
-                  <View style={styles.voteBarBg}>
-                    <View style={[styles.voteBarFill, { width: `${pct}%` }]} />
-                  </View>
+                  <ProgressBar percent={pct} color={colors.secondary} />
                 </View>
                 <Text style={styles.voteCount}>{c.votes}</Text>
               </View>
@@ -123,7 +128,7 @@ function AdminDashboardScreen() {
           })}
         </View>
 
-
+        {/* AI Insights */}
         <View style={styles.card}>
           <View style={styles.insightHeader}>
             <Text style={styles.sectionTitle}>AI Monitoring Insights</Text>
@@ -135,12 +140,8 @@ function AdminDashboardScreen() {
             <View key={item.id} style={styles.insightCard}>
               <Text style={styles.insightTitle}>{item.title}</Text>
               <Text style={styles.insightStatus}>{item.status}</Text>
-              <View style={styles.confRow}>
-                <Text style={styles.confLabel}>Confidence: {item.confidence}%</Text>
-                <View style={styles.confBarBg}>
-                  <View style={[styles.confBarFill, { width: `${item.confidence}%` }]} />
-                </View>
-              </View>
+              <Text style={styles.confLabel}>Confidence: {item.confidence}%</Text>
+              <ProgressBar percent={item.confidence} color={colors.success} />
             </View>
           ))}
         </View>
@@ -151,49 +152,44 @@ function AdminDashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  page:            { flex: 1, backgroundColor: colors.bgLight },
-  header:          { backgroundColor: colors.primary, padding: spacing.lg, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  badge:           { backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: font.sm, paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.full, alignSelf: 'flex-start', marginBottom: 4, overflow: 'hidden' },
-  headerTitle:     { color: '#fff', fontSize: font.xl, fontWeight: '700' },
-  headerSub:       { color: 'rgba(255,255,255,0.75)', fontSize: font.sm },
-  logoutBtn:       { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.md },
-  logoutText:      { color: '#fff', fontSize: font.sm, fontWeight: '600' },
-  content:         { padding: spacing.md },
-  card:            { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.md, elevation: 2 },
-  progressLabel:   { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  progressText:    { fontSize: font.base, color: colors.textDark, fontWeight: '600' },
-  progressPercent: { fontSize: font.base, color: colors.primary, fontWeight: '700' },
-  progressTrack:   { height: 10, backgroundColor: colors.bgLight, borderRadius: 5, overflow: 'hidden' },
-  progressFill:    { height: 10, backgroundColor: colors.primary, borderRadius: 5 },
-  statsRow:        { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  statCard:        { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },
-  statIcon:        { fontSize: 22, marginBottom: 4 },
-  statLabel:       { fontSize: 10, color: colors.textMuted, textAlign: 'center' },
-  statValue:       { fontSize: font.md, fontWeight: '700', color: colors.primary },
-  quickGrid:       { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
-  quickBtn:        { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center' },
-  quickBtnText:    { color: colors.primary, fontWeight: '600', fontSize: font.base },
-  sectionTitle:    { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
-  tabsRow:         { flexDirection: 'row', gap: spacing.xs },
-  tab:             { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.bgLight, borderWidth: 1, borderColor: colors.border },
-  tabActive:       { backgroundColor: colors.primary, borderColor: colors.primary },
-  tabText:         { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
-  tabTextActive:   { color: '#fff' },
-  candidateRow:    { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
-  candidateRowLeft:{ flex: 1, marginRight: spacing.sm },
-  candidateRowName:{ fontSize: font.base, color: colors.textDark, fontWeight: '600', marginBottom: 4 },
-  voteBarBg:       { height: 8, backgroundColor: colors.bgLight, borderRadius: 4, overflow: 'hidden' },
-  voteBarFill:     { height: 8, backgroundColor: colors.secondary, borderRadius: 4 },
-  voteCount:       { fontSize: font.base, fontWeight: '700', color: colors.primary, width: 40, textAlign: 'right' },
-  insightHeader:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
-  insightToggle:   { color: colors.secondary, fontWeight: '600', fontSize: font.base },
-  insightCard:     { backgroundColor: colors.accent, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm },
-  insightTitle:    { fontSize: font.base, fontWeight: '700', color: colors.primary, marginBottom: 4 },
-  insightStatus:   { fontSize: font.sm, color: colors.textDark, marginBottom: spacing.sm },
-  confRow:         { gap: 4 },
-  confLabel:       { fontSize: font.sm, color: colors.textMuted },
-  confBarBg:       { height: 6, backgroundColor: colors.border, borderRadius: 3, overflow: 'hidden' },
-  confBarFill:     { height: 6, backgroundColor: colors.success, borderRadius: 3 },
+  page:             { flex: 1, backgroundColor: colors.bgLight },
+  header:           { backgroundColor: colors.primary, padding: spacing.lg, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  badge:            { backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: font.sm, paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.full, alignSelf: 'flex-start', marginBottom: 4, overflow: 'hidden' },
+  headerTitle:      { color: '#fff', fontSize: font.xl, fontWeight: '700' },
+  headerSub:        { color: 'rgba(255,255,255,0.75)', fontSize: font.sm },
+  logoutBtn:        { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.md },
+  logoutText:       { color: '#fff', fontSize: font.sm, fontWeight: '600' },
+  content:          { padding: spacing.md },
+  card:             { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.md, elevation: 2 },
+  progressLabel:    { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  progressText:     { fontSize: font.base, color: colors.textDark, fontWeight: '600' },
+  progressPercent:  { fontSize: font.base, color: colors.primary, fontWeight: '700' },
+  progressTrack:    { height: 10, backgroundColor: colors.bgLight, borderRadius: 5, overflow: 'hidden', flexDirection: 'row' },
+  progressFill:     { height: 10, borderRadius: 5 },
+  statsRow:         { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
+  statCard:         { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },
+  statIcon:         { fontSize: 22, marginBottom: 4 },
+  statLabel:        { fontSize: 10, color: colors.textMuted, textAlign: 'center' },
+  statValue:        { fontSize: font.md, fontWeight: '700', color: colors.primary },
+  quickGrid:        { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
+  quickBtn:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center' },
+  quickBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.base },
+  sectionTitle:     { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
+  tabsRow:          { flexDirection: 'row', gap: spacing.xs },
+  tab:              { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.bgLight, borderWidth: 1, borderColor: colors.border },
+  tabActive:        { backgroundColor: colors.primary, borderColor: colors.primary },
+  tabText:          { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
+  tabTextActive:    { color: '#fff' },
+  candidateRow:     { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
+  candidateRowLeft: { flex: 1, marginRight: spacing.sm },
+  candidateRowName: { fontSize: font.base, color: colors.textDark, fontWeight: '600', marginBottom: 4 },
+  voteCount:        { fontSize: font.base, fontWeight: '700', color: colors.primary, width: 40, textAlign: 'right' },
+  insightHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
+  insightToggle:    { color: colors.secondary, fontWeight: '600', fontSize: font.base },
+  insightCard:      { backgroundColor: colors.accent, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm },
+  insightTitle:     { fontSize: font.base, fontWeight: '700', color: colors.primary, marginBottom: 4 },
+  insightStatus:    { fontSize: font.sm, color: colors.textDark, marginBottom: spacing.sm },
+  confLabel:        { fontSize: font.sm, color: colors.textMuted, marginBottom: 4 },
 });
 
 export default AdminDashboardScreen;

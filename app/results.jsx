@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
@@ -11,7 +11,6 @@ import useCandidates from '../hooks/useCandidates';
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
 
 function ResultsScreen() {
-  const navigation     = useNavigation();
   const { candidates } = useCandidates();
   const [activePosition, setActivePosition] = useState('President');
 
@@ -30,7 +29,7 @@ function ResultsScreen() {
   return (
     <ScrollView contentContainerStyle={styles.page}>
 
-      {/* Elected Officials */}
+      
       <Text style={styles.sectionTitle}>🎉 Elected Officials</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.lg }}>
         <View style={styles.winnersRow}>
@@ -88,7 +87,8 @@ function ResultsScreen() {
               </View>
               <View style={styles.barRow}>
                 <View style={styles.barBg}>
-                  <View style={[styles.barFill, isWinner && styles.barFillWinner, { width: `${pct}%` }]} />
+                  <View style={[styles.barFill, isWinner && styles.barFillWinner, { flex: pct }]} />
+                  <View style={{ flex: 100 - pct }} />
                 </View>
                 <Text style={styles.pctText}>{pct}%</Text>
               </View>
@@ -98,7 +98,7 @@ function ResultsScreen() {
         );
       })}
 
-      <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
         <Text style={styles.backBtnText}>← Go Back</Text>
       </TouchableOpacity>
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   electedBadge:     { backgroundColor: '#fef3c7', borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 2 },
   electedText:      { fontSize: 10, color: '#d97706', fontWeight: '700' },
   barRow:           { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  barBg:            { flex: 1, height: 7, backgroundColor: colors.bgLight, borderRadius: 4, overflow: 'hidden' },
+  barBg:            { flex: 1, height: 7, backgroundColor: colors.bgLight, borderRadius: 4, overflow: 'hidden', flexDirection: 'row' },
   barFill:          { height: 7, backgroundColor: colors.secondary, borderRadius: 4 },
   barFillWinner:    { backgroundColor: '#f59e0b' },
   pctText:          { fontSize: font.sm, color: colors.textMuted, width: 34, textAlign: 'right' },
