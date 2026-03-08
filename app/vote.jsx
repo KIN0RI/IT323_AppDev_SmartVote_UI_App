@@ -20,7 +20,7 @@ function VoteScreen() {
     <ScrollView style={styles.scroll} contentContainerStyle={styles.page}>
 
       <View style={styles.header}>
-        <Text style={styles.title}>🗳️ Cast Your Vote</Text>
+        <Text style={styles.title}>Cast Your Vote</Text>
         <Text style={styles.subtitle}>
           Step {step + 1} of {positions.length} — Voting for{' '}
           <Text style={{ fontWeight: '700', color: '#fff' }}>{currentPosition}</Text>
