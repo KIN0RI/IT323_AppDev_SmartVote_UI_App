@@ -19,7 +19,7 @@ function ElectionSettingsScreen() {
         </View>
       )}
 
-      {/* Election status toggle */}
+
       <View style={styles.statusCard}>
         <View style={styles.statusLeft}>
           <Text style={styles.statusTitle}>Election Status</Text>
@@ -40,7 +40,6 @@ function ElectionSettingsScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* General settings */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>📋 General Settings</Text>
 
@@ -76,7 +75,6 @@ function ElectionSettingsScreen() {
         </View>
       </View>
 
-      {/* Security settings */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>🔒 Security Settings</Text>
 

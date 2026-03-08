@@ -1,26 +1,21 @@
-// components/forms/VoteForm.jsx
-// Mirrors web: src/components/forms/VoteForm.jsx
-// Web used: <form>, <fieldset>, <legend>, <input type="radio">, onSubmit
-// Mobile uses: <View>, <TouchableOpacity> for radio simulation, onPress
-
 import { useState } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, StyleSheet,
+  StyleSheet,
+  Text, TouchableOpacity,
+  View
 } from 'react-native';
 
 export default function VoteForm({ candidates, onVote }) {
   const [selected,  setSelected]  = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  // Same logic as web — derive unique positions from candidates
+
   const positions = [...new Set(candidates.map((c) => c.position))];
 
-  // Mirrors web's handleChange(position, candidateId)
   const handleSelect = (position, candidateId) => {
     setSelected((prev) => ({ ...prev, [position]: candidateId }));
   };
 
-  // Mirrors web's handleSubmit — checks all positions are selected
   const handleSubmit = () => {
     if (positions.every((pos) => selected[pos])) {
       Object.values(selected).forEach((id) => onVote(id));
@@ -30,7 +25,7 @@ export default function VoteForm({ candidates, onVote }) {
 
   const allSelected = positions.every((pos) => selected[pos]);
 
-  // Success state — mirrors web's sv-vote-success section
+ 
   if (submitted) {
     return (
       <View style={styles.successCard}>
@@ -46,7 +41,7 @@ export default function VoteForm({ candidates, onVote }) {
   return (
     <View style={styles.form}>
       {positions.map((position) => (
-        // Each position = a <fieldset> in the web version
+      
         <View key={position} style={styles.fieldset}>
           <Text style={styles.legend}>{position}</Text>
 
@@ -56,13 +51,11 @@ export default function VoteForm({ candidates, onVote }) {
               .map((candidate) => {
                 const isSelected = selected[position] === candidate.id;
                 return (
-                  // Each candidate = a <label><input type="radio"> in the web version
                   <TouchableOpacity
                     key={candidate.id}
                     style={[styles.radioLabel, isSelected && styles.radioLabelSelected]}
                     onPress={() => handleSelect(position, candidate.id)}
                   >
-                    {/* Custom radio circle — replaces <input type="radio"> */}
                     <View style={[styles.radioCircle, isSelected && styles.radioCircleSelected]}>
                       {isSelected && <View style={styles.radioDot} />}
                     </View>
@@ -76,7 +69,6 @@ export default function VoteForm({ candidates, onVote }) {
         </View>
       ))}
 
-      {/* Submit button — disabled until all positions selected */}
       <TouchableOpacity
         style={[styles.btn, !allSelected && styles.btnDisabled]}
         onPress={handleSubmit}

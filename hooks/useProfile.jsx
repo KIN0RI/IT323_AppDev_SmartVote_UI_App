@@ -1,6 +1,3 @@
-// src/hooks/useProfile.jsx
-// Same logic as web — handleChange adapted for React Native TextInput (no e.target)
-
 import { useState } from 'react';
 
 const initialProfile = {
@@ -17,7 +14,7 @@ function useProfile() {
   const [form,      setForm]      = useState({ ...initialProfile });
   const [saved,     setSaved]     = useState(false);
 
-  // React Native TextInput calls onChangeText(value) — no event object
+
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };

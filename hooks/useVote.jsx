@@ -33,7 +33,7 @@ function useVote() {
     setStep(nextStep);
 
     if (nextStep >= positions.length) {
-      // Pass votes as JSON string — expo-router params must be strings
+      
       router.push({
         pathname: '/vote-analysis',
         params: { votes: JSON.stringify(newChoices) },

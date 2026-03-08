@@ -12,7 +12,6 @@ function VoterLogScreen() {
   return (
     <View style={styles.page}>
 
-      {/* Search */}
       <View style={styles.controls}>
         <TextInput
           style={styles.searchInput}

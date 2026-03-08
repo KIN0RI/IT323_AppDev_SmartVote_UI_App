@@ -1,14 +1,11 @@
-// components/forms/LoginForm.jsx
-// Mirrors web: src/components/forms/LoginForm.jsx
-// Web used: <form>, <input>, <select>, onSubmit, e.preventDefault()
-// Mobile uses: <TextInput>, <TouchableOpacity>, Switch, onPress
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity,
-  StyleSheet, ActivityIndicator,
+  ActivityIndicator,
+  StyleSheet,
+  Text, TextInput, TouchableOpacity,
+  View,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginForm({ onLogin }) {
   const [email,        setEmail]        = useState('');
@@ -21,7 +18,7 @@ export default function LoginForm({ onLogin }) {
   const handleSubmit = () => {
     setError('');
 
-    // Same validation logic as web LoginForm
+   
     if (role === 'student' && !email.endsWith('@gmail.com')) {
       setError('Students must use a Gmail address (@gmail.com).');
       return;
@@ -36,7 +33,7 @@ export default function LoginForm({ onLogin }) {
     }
 
     setIsLoading(true);
-    // Same 1s delay as web
+    
     setTimeout(async () => {
       await AsyncStorage.setItem('userRole', role);
       setIsLoading(false);
@@ -47,14 +44,14 @@ export default function LoginForm({ onLogin }) {
   return (
     <View style={styles.form}>
 
-      {/* Error message — mirrors web's sv-form-error */}
+      
       {!!error && (
         <View style={styles.errorBox}>
           <Text style={styles.errorText}>{error}</Text>
         </View>
       )}
 
-      {/* Role selector — replaces web's <select> */}
+      
       <Text style={styles.label}>Login as</Text>
       <View style={styles.roleRow}>
         {['student', 'admin'].map((r) => (
@@ -70,7 +67,6 @@ export default function LoginForm({ onLogin }) {
         ))}
       </View>
 
-      {/* Email — replaces web's <input type="email"> */}
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={[styles.input, isLoading && styles.inputDisabled]}
@@ -83,7 +79,6 @@ export default function LoginForm({ onLogin }) {
         editable={!isLoading}
       />
 
-      {/* Password — replaces web's <input type="password"> */}
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={[styles.input, isLoading && styles.inputDisabled]}
@@ -95,7 +90,6 @@ export default function LoginForm({ onLogin }) {
         editable={!isLoading}
       />
 
-      {/* Show password toggle — replaces web's <input type="checkbox"> */}
       <TouchableOpacity
         style={styles.showPasswordRow}
         onPress={() => setShowPassword((v) => !v)}
@@ -107,7 +101,6 @@ export default function LoginForm({ onLogin }) {
         <Text style={styles.showPasswordLabel}>Show password</Text>
       </TouchableOpacity>
 
-      {/* Submit button — replaces web's <button type="submit"> */}
       <TouchableOpacity
         style={[styles.btn, isLoading && styles.btnDisabled]}
         onPress={handleSubmit}

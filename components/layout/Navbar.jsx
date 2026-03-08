@@ -1,128 +1,59 @@
-// components/layout/Navbar.jsx
-// Mirrors web: src/components/layout/Navbar.jsx
-// Web used: <nav>, NavLink, useNavigate, localStorage
-// Mobile uses: <View>, useRouter, AsyncStorage, useState
-
-import { useState, useEffect } from 'react';
-import {
-  View, Text, TouchableOpacity, Modal,
-  StyleSheet, Image, Pressable,
-} from 'react-native';
-import { useRouter, usePathname } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Nav links per role — mirrors web's conditional NavLink list
-const studentLinks = [
-  { label: 'Dashboard', path: '/student-dashboard' },
-  { label: 'Vote',      path: '/vote'              },
-  { label: 'Results',   path: '/results'           },
-  { label: 'Profile',   path: '/profile'           },
-];
-
-const adminLinks = [
-  { label: 'Dashboard', path: '/dashboard'          },
-  { label: 'Voter Log', path: '/voter-log'          },
-  { label: 'Candidates',path: '/manage-candidates'  },
-  { label: 'Results',   path: '/results'            },
-  { label: 'Settings',  path: '/election-settings'  },
-];
+import { usePathname, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Drawer from './Drawer';
 
 export default function Navbar() {
   const router   = useRouter();
   const pathname = usePathname();
-  const [role,          setRole]          = useState('student');
-  const [dropdownOpen,  setDropdownOpen]  = useState(false);
+  const [role,        setRole]        = useState('student');
+  const [drawerOpen,  setDrawerOpen]  = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem('userRole').then((r) => { if (r) setRole(r); });
   }, []);
 
-  const links = role === 'admin' ? adminLinks : studentLinks;
-
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('userRole');
-    setDropdownOpen(false);
-    router.replace('/login');
-  };
-
-  const handleNav = (path) => {
-    setDropdownOpen(false);
-    router.push(path);
-  };
+  const homePath = role === 'admin' ? '/dashboard' : '/student-dashboard';
 
   return (
-    <View style={styles.navbar}>
-      <View style={styles.inner}>
+    <>
+      <View style={styles.navbar}>
 
-        {/* Logo */}
-        <TouchableOpacity style={styles.logoRow} onPress={() => handleNav(role === 'admin' ? '/dashboard' : '/student-dashboard')}>
-          <Text style={styles.logoEmoji}>🗳️</Text>
-          <Text style={styles.logoText}>SmartVote</Text>
+        <TouchableOpacity style={styles.hamburger} onPress={() => setDrawerOpen(true)}>
+          <View style={styles.bar} />
+          <View style={styles.bar} />
+          <View style={styles.bar} />
         </TouchableOpacity>
 
-        {/* Nav links (horizontal scroll for mobile) */}
-        <View style={styles.navLinks}>
-          {links.map((link) => {
-            const isActive = pathname === link.path;
-            return (
-              <TouchableOpacity key={link.path} onPress={() => handleNav(link.path)}>
-                <Text style={[styles.navLink, isActive && styles.navLinkActive]}>
-                  {link.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+        <TouchableOpacity style={styles.logoRow} onPress={() => router.push(homePath)}>
+          <Text style={styles.logoEmoji}>🗳️</Text>
+          <Text style={styles.logoText}>USTP SmartVote</Text>
+        </TouchableOpacity>
 
-        {/* Profile dropdown trigger */}
-        <TouchableOpacity style={styles.profileBtn} onPress={() => setDropdownOpen(true)}>
-          <Text style={styles.profileIcon}>👤</Text>
+        <TouchableOpacity style={styles.profileBtn} onPress={() => setDrawerOpen(true)}>
+          <Text style={styles.profileEmoji}>👤</Text>
           <Text style={styles.profileRole}>{role === 'admin' ? 'Admin' : 'Student'}</Text>
-          <Text style={styles.chevron}>▾</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Dropdown modal */}
-      <Modal transparent visible={dropdownOpen} animationType="fade" onRequestClose={() => setDropdownOpen(false)}>
-        <Pressable style={styles.modalOverlay} onPress={() => setDropdownOpen(false)}>
-          <View style={styles.dropdown}>
-            {role === 'student' && (
-              <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNav('/profile')}>
-                <Text style={styles.dropdownText}>👤 My Profile</Text>
-              </TouchableOpacity>
-            )}
-            {role === 'admin' && (
-              <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNav('/election-settings')}>
-                <Text style={styles.dropdownText}>⚙️ Settings</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity style={[styles.dropdownItem, styles.dropdownLogout]} onPress={handleLogout}>
-              <Text style={styles.dropdownLogoutText}>🚪 Logout</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </Modal>
-    </View>
+      <Drawer
+        visible={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        currentPath={pathname}
+      />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  navbar:           { backgroundColor: '#1A3C6E', elevation: 4, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4 },
-  inner:            { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 10, gap: 10 },
-  logoRow:          { flexDirection: 'row', alignItems: 'center', gap: 6, marginRight: 6 },
-  logoEmoji:        { fontSize: 18 },
-  logoText:         { color: '#fff', fontWeight: '700', fontSize: 15 },
-  navLinks:         { flex: 1, flexDirection: 'row', gap: 4, flexWrap: 'nowrap', overflow: 'hidden' },
-  navLink:          { color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: '600', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-  navLinkActive:    { color: '#fff', backgroundColor: 'rgba(255,255,255,0.15)' },
-  profileBtn:       { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.12)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 },
-  profileIcon:      { fontSize: 14 },
-  profileRole:      { color: '#fff', fontSize: 12, fontWeight: '600' },
-  chevron:          { color: '#fff', fontSize: 11 },
-  modalOverlay:     { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
-  dropdown:         { position: 'absolute', top: 56, right: 14, backgroundColor: '#fff', borderRadius: 10, elevation: 8, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 8, minWidth: 160, overflow: 'hidden' },
-  dropdownItem:     { paddingHorizontal: 16, paddingVertical: 13, borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
-  dropdownText:     { fontSize: 14, color: '#1e293b', fontWeight: '600' },
-  dropdownLogout:   { borderBottomWidth: 0 },
-  dropdownLogoutText: { fontSize: 14, color: '#dc2626', fontWeight: '600' },
+  navbar:      { backgroundColor: '#1A3C6E', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 12, elevation: 4 },
+  hamburger:   { padding: 6, marginRight: 10, gap: 4 },
+  bar:         { width: 22, height: 2.5, backgroundColor: '#fff', borderRadius: 2 },
+  logoRow:     { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
+  logoEmoji:   { fontSize: 18 },
+  logoText:    { color: '#fff', fontWeight: '700', fontSize: 15 },
+  profileBtn:  { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 },
+  profileEmoji:{ fontSize: 16 },
+  profileRole: { color: '#fff', fontSize: 12, fontWeight: '600' },
 });

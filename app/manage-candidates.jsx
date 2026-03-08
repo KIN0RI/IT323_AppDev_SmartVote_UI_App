@@ -61,7 +61,6 @@ function ManageCandidatesScreen() {
           </View>
         )}
 
-        {/* Add button */}
         {!showForm && (
           <TouchableOpacity style={styles.addBtn} onPress={() => setShowForm(true)}>
             <Text style={styles.addBtnText}>+ Add Candidate</Text>
@@ -107,8 +106,6 @@ function ManageCandidatesScreen() {
             </View>
           </View>
         )}
-
-        {/* Position tabs */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsScroll}>
           <View style={styles.tabsRow}>
             {positions.map((pos) => (
@@ -125,7 +122,7 @@ function ManageCandidatesScreen() {
           </View>
         </ScrollView>
 
-        {/* Candidate list */}
+
         {filtered.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyText}>No candidates for this position yet.</Text>

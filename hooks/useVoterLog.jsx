@@ -1,6 +1,3 @@
-// src/hooks/useVoterLog.jsx
-// Identical to web project — pure JS logic, no DOM dependencies
-
 import { useState } from 'react';
 
 const mockVoterLog = [
