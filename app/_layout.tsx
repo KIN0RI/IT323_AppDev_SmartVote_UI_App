@@ -1,22 +1,29 @@
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
+        <Stack.Screen name="face-verification" />
+        <Stack.Screen name="student-dashboard" />
+        <Stack.Screen name="vote" />
+        <Stack.Screen name="vote-analysis" />
+        <Stack.Screen name="profile" />
+        <Stack.Screen name="dashboard" />
+        <Stack.Screen name="voter-log" />
+        <Stack.Screen name="manage-candidates" />
+        <Stack.Screen name="election-settings" />
+        <Stack.Screen name="results" />
+        <Stack.Screen name="unauthorized" />
+        <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
