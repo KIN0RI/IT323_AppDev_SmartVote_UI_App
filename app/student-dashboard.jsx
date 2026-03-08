@@ -1,11 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
   Text, TouchableOpacity,
   View,
 } from 'react-native';
+import Navbar from '../components/layout/Navbar';
 import { colors, font, radius, spacing } from '../constants/theme';
 
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
@@ -20,29 +19,12 @@ function StudentDashboardScreen() {
   const [electionStatus] = useState('Voting is Open');
   const [hasVoted]       = useState(false);
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('userRole');
-    router.replace('/login');
-  };
-
   return (
     <ScrollView style={styles.page} contentContainerStyle={{ paddingBottom: 40 }}>
-
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.badge}>Student Portal</Text>
-          <Text style={styles.headerTitle}>Welcome, Student!</Text>
-          <Text style={styles.headerSub}>USTP SmartVote — Student Election System</Text>
-        </View>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
+      <Navbar />
 
       <View style={styles.content}>
 
-        {/* Stat cards */}
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statIcon}>🗳️</Text>
@@ -65,7 +47,6 @@ function StudentDashboardScreen() {
           </View>
         </View>
 
-        {/* Action card */}
         <View style={styles.actionCard}>
           <Text style={styles.actionTitle}>Ready to Cast Your Vote?</Text>
           <Text style={styles.actionSub}>You will vote for {positions.length} positions one at a time.</Text>
@@ -95,7 +76,6 @@ function StudentDashboardScreen() {
           )}
         </View>
 
-        {/* Quick links */}
         <View style={styles.quickLinks}>
           <TouchableOpacity style={styles.quickBtn} onPress={() => router.push('/results')}>
             <Text style={styles.quickBtnText}>🏆 View Results</Text>
@@ -105,7 +85,7 @@ function StudentDashboardScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Announcements */}
+
         <Text style={styles.sectionTitle}>📣 Announcements</Text>
         {announcements.map((a) => (
           <View key={a.id} style={styles.announcement}>

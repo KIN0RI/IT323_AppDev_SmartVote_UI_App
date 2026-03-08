@@ -1,8 +1,5 @@
-// src/hooks/useRole.jsx
-// Web used localStorage — mobile uses AsyncStorage
-
-import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 function useRole() {
   const [role, setRole] = useState('student');

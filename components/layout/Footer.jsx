@@ -1,9 +1,4 @@
-// components/layout/Footer.jsx
-// Mirrors web: src/components/layout/Footer.jsx
-// Web used: <footer>, className
-// Mobile uses: <View>, <Text>, StyleSheet
-
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function Footer() {
   return (

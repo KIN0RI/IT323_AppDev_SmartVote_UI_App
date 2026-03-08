@@ -9,7 +9,6 @@ import { colors, font, radius, spacing } from '../constants/theme';
 function VoteAnalysisScreen() {
   const params = useLocalSearchParams();
 
-  // votes are passed as a JSON string via router.push params
   let votes = [];
   try {
     votes = params.votes ? JSON.parse(params.votes) : [];

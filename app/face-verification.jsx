@@ -23,7 +23,6 @@ function FaceVerificationScreen() {
         <Text style={styles.title}>Face Verification</Text>
         <Text style={styles.subtitle}>Confirm your identity to proceed</Text>
 
-        {/* Camera Box */}
         <View style={styles.cameraBox}>
           {status === 'streaming' || status === 'verifying' || status === 'success' ? (
             <CameraView

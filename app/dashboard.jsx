@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -6,6 +5,7 @@ import {
   Text, TouchableOpacity,
   View,
 } from 'react-native';
+import Navbar from '../components/layout/Navbar';
 import { colors, font, radius, spacing } from '../constants/theme';
 import useCandidates from '../hooks/useCandidates';
 
@@ -43,28 +43,17 @@ function AdminDashboardScreen() {
   const filtered       = candidates.filter((c) => c.position === activePosition);
   const maxVotes       = Math.max(...filtered.map((c) => c.votes), 1);
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('userRole');
-    router.replace('/login');
-  };
-
   return (
     <ScrollView style={styles.page} contentContainerStyle={{ paddingBottom: 40 }}>
+      <Navbar />
 
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.badge}>Admin Panel</Text>
-          <Text style={styles.headerTitle}>USTP SmartVote</Text>
-          <Text style={styles.headerSub}>Election Monitoring Dashboard</Text>
-        </View>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
+      <View style={styles.pageHeader}>
+        <Text style={styles.pageTitle}>Election Monitoring Dashboard</Text>
       </View>
 
       <View style={styles.content}>
 
-        {/* Turnout */}
+  
         <View style={styles.card}>
           <View style={styles.progressLabel}>
             <Text style={styles.progressText}>Voter Turnout</Text>
@@ -73,7 +62,7 @@ function AdminDashboardScreen() {
           <ProgressBar percent={turnoutPercent} color={colors.primary} />
         </View>
 
-        {/* Stat cards */}
+  
         <View style={styles.statsRow}>
           {[
             { icon: '👥', label: 'Total Voters', value: electionStats.totalVoters.toLocaleString() },
@@ -97,7 +86,6 @@ function AdminDashboardScreen() {
           ))}
         </View>
 
-        {/* Vote tally */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Candidate Vote Tally</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
@@ -128,7 +116,6 @@ function AdminDashboardScreen() {
           })}
         </View>
 
-        {/* AI Insights */}
         <View style={styles.card}>
           <View style={styles.insightHeader}>
             <Text style={styles.sectionTitle}>AI Monitoring Insights</Text>
@@ -153,12 +140,8 @@ function AdminDashboardScreen() {
 
 const styles = StyleSheet.create({
   page:             { flex: 1, backgroundColor: colors.bgLight },
-  header:           { backgroundColor: colors.primary, padding: spacing.lg, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  badge:            { backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: font.sm, paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.full, alignSelf: 'flex-start', marginBottom: 4, overflow: 'hidden' },
-  headerTitle:      { color: '#fff', fontSize: font.xl, fontWeight: '700' },
-  headerSub:        { color: 'rgba(255,255,255,0.75)', fontSize: font.sm },
-  logoutBtn:        { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.md },
-  logoutText:       { color: '#fff', fontSize: font.sm, fontWeight: '600' },
+  pageHeader:       { backgroundColor: colors.primary, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
+  pageTitle:        { color: 'rgba(255,255,255,0.85)', fontSize: font.sm },
   content:          { padding: spacing.md },
   card:             { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.md, elevation: 2 },
   progressLabel:    { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
@@ -172,8 +155,8 @@ const styles = StyleSheet.create({
   statLabel:        { fontSize: 10, color: colors.textMuted, textAlign: 'center' },
   statValue:        { fontSize: font.md, fontWeight: '700', color: colors.primary },
   quickGrid:        { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
-  quickBtn:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center' },
-  quickBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.base },
+  quickBtn:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center', justifyContent: 'center', minHeight: 56 },
+  quickBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.sm, textAlign: 'center' },
   sectionTitle:     { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
   tabsRow:          { flexDirection: 'row', gap: spacing.xs },
   tab:              { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.bgLight, borderWidth: 1, borderColor: colors.border },

@@ -1,6 +1,3 @@
-// src/hooks/useCandidates.jsx
-// Same logic as web project — only localStorage removed (not needed here)
-
 import { useState } from 'react';
 
 const initialCandidates = [
