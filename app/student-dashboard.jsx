@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ScrollView, StyleSheet,
@@ -85,7 +86,6 @@ function StudentDashboardScreen() {
           </TouchableOpacity>
         </View>
 
-
         <Text style={styles.sectionTitle}>📣 Announcements</Text>
         {announcements.map((a) => (
           <View key={a.id} style={styles.announcement}>
@@ -101,12 +101,6 @@ function StudentDashboardScreen() {
 
 const styles = StyleSheet.create({
   page:               { flex: 1, backgroundColor: colors.bgLight },
-  header:             { backgroundColor: colors.primary, padding: spacing.lg, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  badge:              { backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: font.sm, paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.full, alignSelf: 'flex-start', marginBottom: 4, overflow: 'hidden' },
-  headerTitle:        { color: '#fff', fontSize: font.xl, fontWeight: '700' },
-  headerSub:          { color: 'rgba(255,255,255,0.75)', fontSize: font.sm },
-  logoutBtn:          { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.md },
-  logoutText:         { color: '#fff', fontSize: font.sm, fontWeight: '600' },
   content:            { padding: spacing.md },
   statsRow:           { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
   statCard:           { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },

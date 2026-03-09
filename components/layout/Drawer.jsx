@@ -11,18 +11,18 @@ import { colors, font, radius, spacing } from '../../constants/theme';
 const DRAWER_WIDTH = Dimensions.get('window').width * 0.72;
 
 const studentLinks = [
-  { icon: '🏠', label: 'Dashboard',  path: '/student-dashboard' },
-  { icon: '🗳️', label: 'Vote',       path: '/vote'              },
-  { icon: '🏆', label: 'Results',    path: '/results'           },
-  { icon: '👤', label: 'Profile',    path: '/profile'           },
+  { icon: '<', label: 'Dashboard',  path: '/student-dashboard' },
+  { icon: '<', label: 'Vote',       path: '/vote'              },
+  { icon: '<', label: 'Results',    path: '/results'           },
+  { icon: '<', label: 'Profile',    path: '/profile'           },
 ];
 
 const adminLinks = [
-  { icon: '🏠', label: 'Dashboard',         path: '/dashboard'         },
-  { icon: '📋', label: 'Voter Log',         path: '/voter-log'         },
-  { icon: '👥', label: 'Manage Candidates', path: '/manage-candidates' },
-  { icon: '🏆', label: 'Results',           path: '/results'           },
-  { icon: '⚙️', label: 'Election Settings', path: '/election-settings' },
+  { icon: '<', label: 'Dashboard',         path: '/dashboard'         },
+  { icon: '<', label: 'Voter Log',         path: '/voter-log'         },
+  { icon: '<', label: 'Manage Candidates', path: '/manage-candidates' },
+  { icon: '<', label: 'Results',           path: '/results'           },
+  { icon: '<', label: 'Election Settings', path: '/election-settings' },
 ];
 
 export default function Drawer({ visible, onClose, currentPath }) {
@@ -120,7 +120,6 @@ export default function Drawer({ visible, onClose, currentPath }) {
           <View style={styles.divider} />
 
           <TouchableOpacity style={styles.logoutItem} onPress={handleLogout}>
-            <Text style={styles.navIcon}>🚪</Text>
             <Text style={styles.logoutLabel}>Logout</Text>
           </TouchableOpacity>
 

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
+  Alert,
   Image,
   ScrollView, StyleSheet,
   Text, TextInput, TouchableOpacity,

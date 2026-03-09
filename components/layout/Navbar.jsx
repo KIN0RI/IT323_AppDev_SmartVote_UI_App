@@ -27,7 +27,6 @@ export default function Navbar() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoRow} onPress={() => router.push(homePath)}>
-          <Text style={styles.logoEmoji}>🗳️</Text>
           <Text style={styles.logoText}>USTP SmartVote</Text>
         </TouchableOpacity>
 

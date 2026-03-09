@@ -22,8 +22,6 @@ export default function RootLayout() {
         <Stack.Screen name="manage-candidates" />
         <Stack.Screen name="election-settings" />
         <Stack.Screen name="results" />
-        <Stack.Screen name="unauthorized" />
-        <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
