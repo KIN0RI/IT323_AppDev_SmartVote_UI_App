@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import {
   Alert,
-  ScrollView, StyleSheet,
+  ScrollView,
   Text, TextInput, TouchableOpacity,
   View
 } from 'react-native';
-import { colors, font, radius, spacing } from '../constants/theme';
 import useCandidates from '../hooks/useCandidates';
+import manageCandidatesStyles from '../constants/styles/manageCandidatesStyles';
+import { colors, spacing } from '../constants/theme';
 
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
 const emptyForm = { name: '', position: 'President' };
@@ -52,69 +53,69 @@ function ManageCandidatesScreen() {
   const handleCancel = () => { setForm(emptyForm); setEditId(null); setShowForm(false); };
 
   return (
-    <View style={styles.page}>
+    <View style={manageCandidatesStyles.page}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
 
         {saved && (
-          <View style={styles.successBanner}>
-            <Text style={styles.successText}>✅ Candidates updated successfully!</Text>
+          <View style={manageCandidatesStyles.successBanner}>
+            <Text style={manageCandidatesStyles.successText}>✅ Candidates updated successfully!</Text>
           </View>
         )}
 
         {!showForm && (
-          <TouchableOpacity style={styles.addBtn} onPress={() => setShowForm(true)}>
-            <Text style={styles.addBtnText}>+ Add Candidate</Text>
+          <TouchableOpacity style={manageCandidatesStyles.addBtn} onPress={() => setShowForm(true)}>
+            <Text style={manageCandidatesStyles.addBtnText}>+ Add Candidate</Text>
           </TouchableOpacity>
         )}
 
         {/* Form */}
         {showForm && (
-          <View style={styles.formCard}>
-            <Text style={styles.formTitle}>{editId ? 'Edit Candidate' : 'Add New Candidate'}</Text>
+          <View style={manageCandidatesStyles.formCard}>
+            <Text style={manageCandidatesStyles.formTitle}>{editId ? 'Edit Candidate' : 'Add New Candidate'}</Text>
 
-            <Text style={styles.label}>Full Name</Text>
+            <Text style={manageCandidatesStyles.label}>Full Name</Text>
             <TextInput
-              style={styles.input}
+              style={manageCandidatesStyles.input}
               value={form.name}
               onChangeText={(v) => setForm((p) => ({ ...p, name: v }))}
               placeholder="Enter candidate name"
               placeholderTextColor={colors.textMuted}
             />
 
-            <Text style={styles.label}>Position</Text>
+            <Text style={manageCandidatesStyles.label}>Position</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
               <View style={{ flexDirection: 'row', gap: spacing.xs }}>
                 {positions.map((pos) => (
                   <TouchableOpacity
                     key={pos}
-                    style={[styles.posChip, form.position === pos && styles.posChipActive]}
+                    style={[manageCandidatesStyles.posChip, form.position === pos && manageCandidatesStyles.posChipActive]}
                     onPress={() => setForm((p) => ({ ...p, position: pos }))}
                   >
-                    <Text style={[styles.posChipText, form.position === pos && styles.posChipTextActive]}>{pos}</Text>
+                    <Text style={[manageCandidatesStyles.posChipText, form.position === pos && manageCandidatesStyles.posChipTextActive]}>{pos}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </ScrollView>
 
-            <View style={styles.btnRow}>
-              <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                <Text style={styles.btnText}>{editId ? 'Save Changes' : 'Add Candidate'}</Text>
+            <View style={manageCandidatesStyles.btnRow}>
+              <TouchableOpacity style={manageCandidatesStyles.btn} onPress={handleSubmit}>
+                <Text style={manageCandidatesStyles.btnText}>{editId ? 'Save Changes' : 'Add Candidate'}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.outlineBtn} onPress={handleCancel}>
-                <Text style={styles.outlineBtnText}>Cancel</Text>
+              <TouchableOpacity style={manageCandidatesStyles.outlineBtn} onPress={handleCancel}>
+                <Text style={manageCandidatesStyles.outlineBtnText}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsScroll}>
-          <View style={styles.tabsRow}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={manageCandidatesStyles.tabsScroll}>
+          <View style={manageCandidatesStyles.tabsRow}>
             {positions.map((pos) => (
               <TouchableOpacity
                 key={pos}
-                style={[styles.tab, activePosition === pos && styles.tabActive]}
+                style={[manageCandidatesStyles.tab, activePosition === pos && manageCandidatesStyles.tabActive]}
                 onPress={() => setActivePosition(pos)}
               >
-                <Text style={[styles.tabText, activePosition === pos && styles.tabTextActive]}>
+                <Text style={[manageCandidatesStyles.tabText, activePosition === pos && manageCandidatesStyles.tabTextActive]}>
                   {pos} ({localCandidates.filter((c) => c.position === pos).length})
                 </Text>
               </TouchableOpacity>
@@ -124,26 +125,26 @@ function ManageCandidatesScreen() {
 
 
         {filtered.length === 0 ? (
-          <View style={styles.empty}>
-            <Text style={styles.emptyText}>No candidates for this position yet.</Text>
+          <View style={manageCandidatesStyles.empty}>
+            <Text style={manageCandidatesStyles.emptyText}>No candidates for this position yet.</Text>
           </View>
         ) : (
           filtered.map((candidate, index) => (
-            <View key={candidate.id} style={styles.candidateRow}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{candidate.name.charAt(0)}</Text>
+            <View key={candidate.id} style={manageCandidatesStyles.candidateRow}>
+              <View style={manageCandidatesStyles.avatar}>
+                <Text style={manageCandidatesStyles.avatarText}>{candidate.name.charAt(0)}</Text>
               </View>
-              <View style={styles.candidateInfo}>
-                <Text style={styles.candidateName}>{index + 1}. {candidate.name}</Text>
-                <Text style={styles.candidatePos}>{candidate.position}</Text>
-                <Text style={styles.candidateVotes}>{candidate.votes} votes</Text>
+              <View style={manageCandidatesStyles.candidateInfo}>
+                <Text style={manageCandidatesStyles.candidateName}>{index + 1}. {candidate.name}</Text>
+                <Text style={manageCandidatesStyles.candidatePos}>{candidate.position}</Text>
+                <Text style={manageCandidatesStyles.candidateVotes}>{candidate.votes} votes</Text>
               </View>
-              <View style={styles.actions}>
-                <TouchableOpacity style={styles.editBtn} onPress={() => handleEdit(candidate)}>
-                  <Text style={styles.editBtnText}>Edit</Text>
+              <View style={manageCandidatesStyles.actions}>
+                <TouchableOpacity style={manageCandidatesStyles.editBtn} onPress={() => handleEdit(candidate)}>
+                  <Text style={manageCandidatesStyles.editBtnText}>Edit</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(candidate.id)}>
-                  <Text style={styles.deleteBtnText}>Delete</Text>
+                <TouchableOpacity style={manageCandidatesStyles.deleteBtn} onPress={() => handleDelete(candidate.id)}>
+                  <Text style={manageCandidatesStyles.deleteBtnText}>Delete</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -153,46 +154,5 @@ function ManageCandidatesScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page:               { flex: 1, backgroundColor: colors.bgLight },
-  successBanner:      { backgroundColor: '#dcfce7', padding: spacing.md, margin: spacing.md, borderRadius: radius.md },
-  successText:        { color: colors.success, fontWeight: '600', textAlign: 'center' },
-  addBtn:             { backgroundColor: colors.primary, margin: spacing.md, borderRadius: radius.md, padding: 13, alignItems: 'center' },
-  addBtnText:         { color: '#fff', fontWeight: '700', fontSize: font.md },
-  formCard:           { backgroundColor: colors.cardBg, margin: spacing.md, borderRadius: radius.md, padding: spacing.lg, elevation: 2 },
-  formTitle:          { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.md },
-  label:              { fontSize: font.sm, fontWeight: '600', color: colors.textDark, marginBottom: 4 },
-  input:              { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: spacing.md, fontSize: font.base, color: colors.textDark, marginBottom: spacing.md, backgroundColor: '#FAFAFA' },
-  posChip:            { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.bgLight },
-  posChipActive:      { backgroundColor: colors.primary, borderColor: colors.primary },
-  posChipText:        { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
-  posChipTextActive:  { color: '#fff' },
-  btnRow:             { flexDirection: 'row', gap: spacing.sm },
-  btn:                { flex: 1, backgroundColor: colors.primary, borderRadius: radius.md, padding: 12, alignItems: 'center' },
-  btnText:            { color: '#fff', fontWeight: '700', fontSize: font.base },
-  outlineBtn:         { flex: 1, borderWidth: 1, borderColor: colors.primary, borderRadius: radius.md, padding: 12, alignItems: 'center' },
-  outlineBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.base },
-  tabsScroll:         { marginHorizontal: spacing.md, marginBottom: spacing.sm },
-  tabsRow:            { flexDirection: 'row', gap: spacing.xs, paddingVertical: spacing.sm },
-  tab:                { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.bgLight },
-  tabActive:          { backgroundColor: colors.primary, borderColor: colors.primary },
-  tabText:            { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
-  tabTextActive:      { color: '#fff' },
-  candidateRow:       { backgroundColor: colors.cardBg, marginHorizontal: spacing.md, marginBottom: spacing.sm, borderRadius: radius.md, padding: spacing.md, flexDirection: 'row', alignItems: 'center', elevation: 1 },
-  avatar:             { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.primary, justifyContent: 'center', alignItems: 'center', marginRight: spacing.sm },
-  avatarText:         { color: '#fff', fontWeight: '700', fontSize: font.lg },
-  candidateInfo:      { flex: 1 },
-  candidateName:      { fontSize: font.base, fontWeight: '700', color: colors.textDark },
-  candidatePos:       { fontSize: font.sm, color: colors.secondary },
-  candidateVotes:     { fontSize: font.sm, color: colors.textMuted },
-  actions:            { gap: spacing.xs },
-  editBtn:            { backgroundColor: colors.accent, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 5, marginBottom: 4 },
-  editBtnText:        { color: colors.primary, fontSize: font.sm, fontWeight: '600' },
-  deleteBtn:          { backgroundColor: '#fee2e2', borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 5 },
-  deleteBtnText:      { color: colors.danger, fontSize: font.sm, fontWeight: '600' },
-  empty:              { alignItems: 'center', padding: spacing.xl },
-  emptyText:          { color: colors.textMuted, fontSize: font.base },
-});
 
 export default ManageCandidatesScreen;
