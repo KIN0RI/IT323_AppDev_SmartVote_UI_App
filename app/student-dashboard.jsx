@@ -1,12 +1,12 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  ScrollView, StyleSheet,
+  ScrollView,
   Text, TouchableOpacity,
   View,
 } from 'react-native';
 import Navbar from '../components/layout/Navbar';
-import { colors, font, radius, spacing } from '../constants/theme';
+import studentDashboardStyles from '../constants/styles/studentDashboardStyles';
 
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
 
@@ -21,76 +21,76 @@ function StudentDashboardScreen() {
   const [hasVoted]       = useState(false);
 
   return (
-    <ScrollView style={styles.page} contentContainerStyle={{ paddingBottom: 40 }}>
+    <ScrollView style={studentDashboardStyles.page} contentContainerStyle={{ paddingBottom: 40 }}>
       <Navbar />
 
-      <View style={styles.content}>
+      <View style={studentDashboardStyles.content}>
 
-        <View style={styles.statsRow}>
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>🗳️</Text>
-            <Text style={styles.statLabel}>Election Status</Text>
-            <Text style={[styles.statusBadge, electionStatus === 'Voting is Open' ? styles.statusOpen : styles.statusClosed]}>
+        <View style={studentDashboardStyles.statsRow}>
+          <View style={studentDashboardStyles.statCard}>
+            <Text style={studentDashboardStyles.statIcon}>🗳️</Text>
+            <Text style={studentDashboardStyles.statLabel}>Election Status</Text>
+            <Text style={[studentDashboardStyles.statusBadge, electionStatus === 'Voting is Open' ? studentDashboardStyles.statusOpen : studentDashboardStyles.statusClosed]}>
               {electionStatus}
             </Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>📋</Text>
-            <Text style={styles.statLabel}>Positions to Vote</Text>
-            <Text style={styles.statValue}>{positions.length}</Text>
+          <View style={studentDashboardStyles.statCard}>
+            <Text style={studentDashboardStyles.statIcon}>📋</Text>
+            <Text style={studentDashboardStyles.statLabel}>Positions to Vote</Text>
+            <Text style={studentDashboardStyles.statValue}>{positions.length}</Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>✅</Text>
-            <Text style={styles.statLabel}>Your Vote Status</Text>
-            <Text style={[styles.statusBadge, hasVoted ? styles.statusOpen : styles.statusClosed]}>
+          <View style={studentDashboardStyles.statCard}>
+            <Text style={studentDashboardStyles.statIcon}>✅</Text>
+            <Text style={studentDashboardStyles.statLabel}>Your Vote Status</Text>
+            <Text style={[studentDashboardStyles.statusBadge, hasVoted ? studentDashboardStyles.statusOpen : studentDashboardStyles.statusClosed]}>
               {hasVoted ? 'Voted' : 'Not Yet Voted'}
             </Text>
           </View>
         </View>
 
-        <View style={styles.actionCard}>
-          <Text style={styles.actionTitle}>Ready to Cast Your Vote?</Text>
-          <Text style={styles.actionSub}>You will vote for {positions.length} positions one at a time.</Text>
+        <View style={studentDashboardStyles.actionCard}>
+          <Text style={studentDashboardStyles.actionTitle}>Ready to Cast Your Vote?</Text>
+          <Text style={studentDashboardStyles.actionSub}>You will vote for {positions.length} positions one at a time.</Text>
 
-          <View style={styles.positionList}>
+          <View style={studentDashboardStyles.positionList}>
             {positions.map((pos, i) => (
-              <View key={pos} style={styles.positionBadge}>
-                <Text style={styles.positionBadgeText}>{i + 1}. {pos}</Text>
+              <View key={pos} style={studentDashboardStyles.positionBadge}>
+                <Text style={studentDashboardStyles.positionBadgeText}>{i + 1}. {pos}</Text>
               </View>
             ))}
           </View>
 
           <TouchableOpacity
-            style={[styles.voteBtn, (electionStatus !== 'Voting is Open' || hasVoted) && styles.voteBtnDisabled]}
+            style={[studentDashboardStyles.voteBtn, (electionStatus !== 'Voting is Open' || hasVoted) && studentDashboardStyles.voteBtnDisabled]}
             onPress={() => router.push('/vote')}
             disabled={electionStatus !== 'Voting is Open' || hasVoted}
           >
-            <Text style={styles.voteBtnText}>
+            <Text style={studentDashboardStyles.voteBtnText}>
               {hasVoted ? '✅ Already Voted' : '🗳️ Proceed to Vote'}
             </Text>
           </TouchableOpacity>
 
           {hasVoted && (
-            <TouchableOpacity style={styles.outlineBtn} onPress={() => router.push('/vote-analysis')}>
-              <Text style={styles.outlineBtnText}>View My Votes</Text>
+            <TouchableOpacity style={studentDashboardStyles.outlineBtn} onPress={() => router.push('/vote-analysis')}>
+              <Text style={studentDashboardStyles.outlineBtnText}>View My Votes</Text>
             </TouchableOpacity>
           )}
         </View>
 
-        <View style={styles.quickLinks}>
-          <TouchableOpacity style={styles.quickBtn} onPress={() => router.push('/results')}>
-            <Text style={styles.quickBtnText}>🏆 View Results</Text>
+        <View style={studentDashboardStyles.quickLinks}>
+          <TouchableOpacity style={studentDashboardStyles.quickBtn} onPress={() => router.push('/results')}>
+            <Text style={studentDashboardStyles.quickBtnText}>🏆 View Results</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.quickBtn} onPress={() => router.push('/profile')}>
-            <Text style={styles.quickBtnText}>👤 My Profile</Text>
+          <TouchableOpacity style={studentDashboardStyles.quickBtn} onPress={() => router.push('/profile')}>
+            <Text style={studentDashboardStyles.quickBtnText}>👤 My Profile</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>📣 Announcements</Text>
+        <Text style={studentDashboardStyles.sectionTitle}>📣 Announcements</Text>
         {announcements.map((a) => (
-          <View key={a.id} style={styles.announcement}>
-            <Text style={styles.announcementIcon}>{a.icon}</Text>
-            <Text style={styles.announcementText}>{a.text}</Text>
+          <View key={a.id} style={studentDashboardStyles.announcement}>
+            <Text style={studentDashboardStyles.announcementIcon}>{a.icon}</Text>
+            <Text style={studentDashboardStyles.announcementText}>{a.text}</Text>
           </View>
         ))}
 
@@ -98,36 +98,5 @@ function StudentDashboardScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  page:               { flex: 1, backgroundColor: colors.bgLight },
-  content:            { padding: spacing.md },
-  statsRow:           { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  statCard:           { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },
-  statIcon:           { fontSize: 22, marginBottom: 4 },
-  statLabel:          { fontSize: 10, color: colors.textMuted, textAlign: 'center', marginBottom: 4 },
-  statValue:          { fontSize: font.lg, fontWeight: '700', color: colors.primary },
-  statusBadge:        { fontSize: 10, fontWeight: '700', paddingHorizontal: 6, paddingVertical: 2, borderRadius: radius.sm, overflow: 'hidden' },
-  statusOpen:         { backgroundColor: '#dcfce7', color: colors.success },
-  statusClosed:       { backgroundColor: '#fee2e2', color: colors.danger },
-  actionCard:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.md, elevation: 2 },
-  actionTitle:        { fontSize: font.lg, fontWeight: '700', color: colors.primary, marginBottom: 4 },
-  actionSub:          { fontSize: font.base, color: colors.textMuted, marginBottom: spacing.md },
-  positionList:       { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.md },
-  positionBadge:      { backgroundColor: colors.accent, borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 4 },
-  positionBadgeText:  { fontSize: font.sm, color: colors.primary, fontWeight: '600' },
-  voteBtn:            { backgroundColor: colors.primary, borderRadius: radius.md, padding: 14, alignItems: 'center', marginBottom: spacing.sm },
-  voteBtnDisabled:    { backgroundColor: colors.textMuted },
-  voteBtnText:        { color: '#fff', fontWeight: '700', fontSize: font.md },
-  outlineBtn:         { borderWidth: 1, borderColor: colors.primary, borderRadius: radius.md, padding: 12, alignItems: 'center' },
-  outlineBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.base },
-  quickLinks:         { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  quickBtn:           { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, alignItems: 'center', elevation: 2 },
-  quickBtnText:       { color: colors.primary, fontWeight: '600', fontSize: font.base },
-  sectionTitle:       { fontSize: font.lg, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
-  announcement:       { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm, elevation: 1 },
-  announcementIcon:   { fontSize: 18, marginRight: spacing.sm },
-  announcementText:   { flex: 1, fontSize: font.base, color: colors.textDark },
-});
 
 export default StudentDashboardScreen;

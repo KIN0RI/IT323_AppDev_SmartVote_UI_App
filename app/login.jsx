@@ -5,11 +5,12 @@ import { useState } from 'react';
 import {
   Alert,
   Image,
-  ScrollView, StyleSheet,
+  ScrollView,
   Text, TextInput, TouchableOpacity,
   View,
 } from 'react-native';
-import { colors, font, radius, spacing } from '../constants/theme';
+import loginStyles from '../constants/styles/loginStyles';
+import { colors } from '../constants/theme';
 
 function LoginScreen() {
  
@@ -27,26 +28,26 @@ function LoginScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.page}>
-      <View style={styles.card}>
+    <ScrollView contentContainerStyle={loginStyles.page}>
+      <View style={loginStyles.card}>
 
         <Image
           source={require('../assets/images/logo.png')}
-          style={styles.logoImg}
+          style={loginStyles.logoImg}
           resizeMode="contain"
         />
 
-        <Text style={styles.title}>USTP SmartVote</Text>
-        <Text style={styles.subtitle}>Sign in to access the voting system</Text>
+        <Text style={loginStyles.title}>USTP SmartVote</Text>
+        <Text style={loginStyles.subtitle}>Sign in to access the voting system</Text>
 
-        <View style={styles.roleRow}>
+        <View style={loginStyles.roleRow}>
           {['student', 'admin'].map((r) => (
             <TouchableOpacity
               key={r}
-              style={[styles.roleBtn, role === r && styles.roleBtnActive]}
+              style={[loginStyles.roleBtn, role === r && loginStyles.roleBtnActive]}
               onPress={() => setRole(r)}
             >
-              <Text style={[styles.roleBtnText, role === r && styles.roleBtnTextActive]}>
+              <Text style={[loginStyles.roleBtnText, role === r && loginStyles.roleBtnTextActive]}>
                 {r === 'student' ? ' Student' : ' Admin'}
               </Text>
             </TouchableOpacity>
@@ -54,7 +55,7 @@ function LoginScreen() {
         </View>
 
         <TextInput
-          style={styles.input}
+          style={loginStyles.input}
           placeholder="Email"
           placeholderTextColor={colors.textMuted}
           value={email}
@@ -64,7 +65,7 @@ function LoginScreen() {
         />
 
         <TextInput
-          style={styles.input}
+          style={loginStyles.input}
           placeholder="Password"
           placeholderTextColor={colors.textMuted}
           value={password}
@@ -72,13 +73,13 @@ function LoginScreen() {
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-          <Text style={styles.btnText}>Sign In</Text>
+        <TouchableOpacity style={loginStyles.btn} onPress={handleLogin}>
+          <Text style={loginStyles.btnText}>Sign In</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push('/register')}> 
-          <Text style={styles.linkText}>
-            Don't have an account? <Text style={styles.link}>Register here</Text>
+          <Text style={loginStyles.linkText}>
+            Don't have an account? <Text style={loginStyles.link}>Register here</Text>
           </Text>
         </TouchableOpacity>
 
@@ -86,24 +87,5 @@ function LoginScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  page:              { flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.bgLight, padding: spacing.lg },
-  card:              { width: '100%', maxWidth: 400, backgroundColor: colors.cardBg, borderRadius: radius.lg, padding: spacing.lg, alignItems: 'center', elevation: 4, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 8 },
-  logoPlaceholder:   { width: 72, height: 72, borderRadius: 36, backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center', marginBottom: spacing.md },
-  logoImg:            { width: 80, height: 80, marginBottom: spacing.md },
-  title:             { fontSize: font.xl, fontWeight: '700', color: colors.primary, marginBottom: 4 },
-  subtitle:          { fontSize: font.base, color: colors.textMuted, marginBottom: spacing.lg, textAlign: 'center' },
-  roleRow:           { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md, width: '100%' },
-  roleBtn:           { flex: 1, padding: spacing.sm, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, alignItems: 'center', backgroundColor: colors.bgLight },
-  roleBtnActive:     { backgroundColor: colors.primary, borderColor: colors.primary },
-  roleBtnText:       { fontSize: font.base, color: colors.textDark, fontWeight: '600' },
-  roleBtnTextActive: { color: '#fff' },
-  input:             { width: '100%', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm, fontSize: font.md, color: colors.textDark, backgroundColor: '#FAFAFA' },
-  btn:               { width: '100%', backgroundColor: colors.primary, borderRadius: radius.md, padding: 14, alignItems: 'center', marginTop: spacing.sm, marginBottom: spacing.md },
-  btnText:           { color: '#fff', fontWeight: '700', fontSize: font.md },
-  linkText:          { fontSize: font.sm, color: colors.textMuted },
-  link:              { color: colors.secondary, fontWeight: '600' },
-});
 
 export default LoginScreen;

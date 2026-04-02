@@ -1,13 +1,14 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  ScrollView, StyleSheet,
+  ScrollView,
   Text, TouchableOpacity,
   View,
 } from 'react-native';
 import Navbar from '../components/layout/Navbar';
-import { colors, font, radius, spacing } from '../constants/theme';
 import useCandidates from '../hooks/useCandidates';
+import dashboardStyles from '../constants/styles/dashboardStyles';
+import { colors, spacing } from '../constants/theme';
 
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
 
@@ -27,8 +28,8 @@ const adminLinks = [
 
 function ProgressBar({ percent, color = colors.primary }) {
   return (
-    <View style={styles.progressTrack}>
-      <View style={[styles.progressFill, { flex: percent / 100, backgroundColor: color }]} />
+    <View style={dashboardStyles.progressTrack}>
+      <View style={[dashboardStyles.progressFill, { flex: percent / 100, backgroundColor: color }]} />
       <View style={{ flex: 1 - percent / 100 }} />
     </View>
   );
@@ -44,59 +45,59 @@ function AdminDashboardScreen() {
   const maxVotes       = Math.max(...filtered.map((c) => c.votes), 1);
 
   return (
-    <ScrollView style={styles.page} contentContainerStyle={{ paddingBottom: 40 }}>
+    <ScrollView style={dashboardStyles.page} contentContainerStyle={{ paddingBottom: 40 }}>
       <Navbar />
 
-      <View style={styles.pageHeader}>
-        <Text style={styles.pageTitle}>Election Monitoring Dashboard</Text>
+      <View style={dashboardStyles.pageHeader}>
+        <Text style={dashboardStyles.pageTitle}>Election Monitoring Dashboard</Text>
       </View>
 
-      <View style={styles.content}>
+      <View style={dashboardStyles.content}>
 
   
-        <View style={styles.card}>
-          <View style={styles.progressLabel}>
-            <Text style={styles.progressText}>Voter Turnout</Text>
-            <Text style={styles.progressPercent}>{turnoutPercent}%</Text>
+        <View style={dashboardStyles.card}>
+          <View style={dashboardStyles.progressLabel}>
+            <Text style={dashboardStyles.progressText}>Voter Turnout</Text>
+            <Text style={dashboardStyles.progressPercent}>{turnoutPercent}%</Text>
           </View>
           <ProgressBar percent={turnoutPercent} color={colors.primary} />
         </View>
 
   
-        <View style={styles.statsRow}>
+        <View style={dashboardStyles.statsRow}>
           {[
             { icon: '👥', label: 'Total Voters', value: electionStats.totalVoters.toLocaleString() },
             { icon: '✅', label: 'Votes Cast',   value: electionStats.votesCast.toLocaleString()   },
             { icon: '⏳', label: 'Remaining',    value: electionStats.remainingVoters.toLocaleString() },
           ].map(({ icon, label, value }) => (
-            <View key={label} style={styles.statCard}>
-              <Text style={styles.statIcon}>{icon}</Text>
-              <Text style={styles.statLabel}>{label}</Text>
-              <Text style={styles.statValue}>{value}</Text>
+            <View key={label} style={dashboardStyles.statCard}>
+              <Text style={dashboardStyles.statIcon}>{icon}</Text>
+              <Text style={dashboardStyles.statLabel}>{label}</Text>
+              <Text style={dashboardStyles.statValue}>{value}</Text>
             </View>
           ))}
         </View>
 
         {/* Quick links */}
-        <View style={styles.quickGrid}>
+        <View style={dashboardStyles.quickGrid}>
           {adminLinks.map(({ label, screen }) => (
-            <TouchableOpacity key={screen} style={styles.quickBtn} onPress={() => router.push(screen)}>
-              <Text style={styles.quickBtnText}>{label}</Text>
+            <TouchableOpacity key={screen} style={dashboardStyles.quickBtn} onPress={() => router.push(screen)}>
+              <Text style={dashboardStyles.quickBtnText}>{label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Candidate Vote Tally</Text>
+        <View style={dashboardStyles.card}>
+          <Text style={dashboardStyles.sectionTitle}>Candidate Vote Tally</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
-            <View style={styles.tabsRow}>
+            <View style={dashboardStyles.tabsRow}>
               {positions.map((pos) => (
                 <TouchableOpacity
                   key={pos}
-                  style={[styles.tab, activePosition === pos && styles.tabActive]}
+                  style={[dashboardStyles.tab, activePosition === pos && dashboardStyles.tabActive]}
                   onPress={() => setActivePosition(pos)}
                 >
-                  <Text style={[styles.tabText, activePosition === pos && styles.tabTextActive]}>{pos}</Text>
+                  <Text style={[dashboardStyles.tabText, activePosition === pos && dashboardStyles.tabTextActive]}>{pos}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -105,29 +106,29 @@ function AdminDashboardScreen() {
           {filtered.map((c) => {
             const pct = Math.round((c.votes / maxVotes) * 100);
             return (
-              <View key={c.id} style={styles.candidateRow}>
-                <View style={styles.candidateRowLeft}>
-                  <Text style={styles.candidateRowName}>{c.name}</Text>
+              <View key={c.id} style={dashboardStyles.candidateRow}>
+                <View style={dashboardStyles.candidateRowLeft}>
+                  <Text style={dashboardStyles.candidateRowName}>{c.name}</Text>
                   <ProgressBar percent={pct} color={colors.secondary} />
                 </View>
-                <Text style={styles.voteCount}>{c.votes}</Text>
+                <Text style={dashboardStyles.voteCount}>{c.votes}</Text>
               </View>
             );
           })}
         </View>
 
-        <View style={styles.card}>
-          <View style={styles.insightHeader}>
-            <Text style={styles.sectionTitle}>AI Monitoring Insights</Text>
+        <View style={dashboardStyles.card}>
+          <View style={dashboardStyles.insightHeader}>
+            <Text style={dashboardStyles.sectionTitle}>AI Monitoring Insights</Text>
             <TouchableOpacity onPress={() => setShowInsights((v) => !v)}>
-              <Text style={styles.insightToggle}>{showInsights ? 'Hide' : 'Show'}</Text>
+              <Text style={dashboardStyles.insightToggle}>{showInsights ? 'Hide' : 'Show'}</Text>
             </TouchableOpacity>
           </View>
           {showInsights && insights.map((item) => (
-            <View key={item.id} style={styles.insightCard}>
-              <Text style={styles.insightTitle}>{item.title}</Text>
-              <Text style={styles.insightStatus}>{item.status}</Text>
-              <Text style={styles.confLabel}>Confidence: {item.confidence}%</Text>
+            <View key={item.id} style={dashboardStyles.insightCard}>
+              <Text style={dashboardStyles.insightTitle}>{item.title}</Text>
+              <Text style={dashboardStyles.insightStatus}>{item.status}</Text>
+              <Text style={dashboardStyles.confLabel}>Confidence: {item.confidence}%</Text>
               <ProgressBar percent={item.confidence} color={colors.success} />
             </View>
           ))}
@@ -137,42 +138,5 @@ function AdminDashboardScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  page:             { flex: 1, backgroundColor: colors.bgLight },
-  pageHeader:       { backgroundColor: colors.primary, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
-  pageTitle:        { color: 'rgba(255,255,255,0.85)', fontSize: font.sm },
-  content:          { padding: spacing.md },
-  card:             { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.md, elevation: 2 },
-  progressLabel:    { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  progressText:     { fontSize: font.base, color: colors.textDark, fontWeight: '600' },
-  progressPercent:  { fontSize: font.base, color: colors.primary, fontWeight: '700' },
-  progressTrack:    { height: 10, backgroundColor: colors.bgLight, borderRadius: 5, overflow: 'hidden', flexDirection: 'row' },
-  progressFill:     { height: 10, borderRadius: 5 },
-  statsRow:         { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  statCard:         { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },
-  statIcon:         { fontSize: 22, marginBottom: 4 },
-  statLabel:        { fontSize: 10, color: colors.textMuted, textAlign: 'center' },
-  statValue:        { fontSize: font.md, fontWeight: '700', color: colors.primary },
-  quickGrid:        { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
-  quickBtn:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center', justifyContent: 'center', minHeight: 56 },
-  quickBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.sm, textAlign: 'center' },
-  sectionTitle:     { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
-  tabsRow:          { flexDirection: 'row', gap: spacing.xs },
-  tab:              { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.bgLight, borderWidth: 1, borderColor: colors.border },
-  tabActive:        { backgroundColor: colors.primary, borderColor: colors.primary },
-  tabText:          { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
-  tabTextActive:    { color: '#fff' },
-  candidateRow:     { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
-  candidateRowLeft: { flex: 1, marginRight: spacing.sm },
-  candidateRowName: { fontSize: font.base, color: colors.textDark, fontWeight: '600', marginBottom: 4 },
-  voteCount:        { fontSize: font.base, fontWeight: '700', color: colors.primary, width: 40, textAlign: 'right' },
-  insightHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
-  insightToggle:    { color: colors.secondary, fontWeight: '600', fontSize: font.base },
-  insightCard:      { backgroundColor: colors.accent, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm },
-  insightTitle:     { fontSize: font.base, fontWeight: '700', color: colors.primary, marginBottom: 4 },
-  insightStatus:    { fontSize: font.sm, color: colors.textDark, marginBottom: spacing.sm },
-  confLabel:        { fontSize: font.sm, color: colors.textMuted, marginBottom: 4 },
-});
 
 export default AdminDashboardScreen;
