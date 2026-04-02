@@ -1,0 +1,41 @@
+import { StyleSheet } from 'react-native';
+import { colors, font, radius, spacing } from '../theme';
+
+const dashboardStyles = StyleSheet.create({
+  page:             { flex: 1, backgroundColor: colors.bgLight },
+  pageHeader:       { backgroundColor: colors.primary, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
+  pageTitle:        { color: 'rgba(255,255,255,0.85)', fontSize: font.sm },
+  content:          { padding: spacing.md },
+  card:             { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.md, elevation: 2 },
+  progressLabel:    { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  progressText:     { fontSize: font.base, color: colors.textDark, fontWeight: '600' },
+  progressPercent:  { fontSize: font.base, color: colors.primary, fontWeight: '700' },
+  progressTrack:    { height: 10, backgroundColor: colors.bgLight, borderRadius: 5, overflow: 'hidden', flexDirection: 'row' },
+  progressFill:     { height: 10, borderRadius: 5 },
+  statsRow:         { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
+  statCard:         { flex: 1, backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.sm, alignItems: 'center', elevation: 2 },
+  statIcon:         { fontSize: 22, marginBottom: 4 },
+  statLabel:        { fontSize: 10, color: colors.textMuted, textAlign: 'center' },
+  statValue:        { fontSize: font.md, fontWeight: '700', color: colors.primary },
+  quickGrid:        { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
+  quickBtn:         { backgroundColor: colors.cardBg, borderRadius: radius.md, padding: spacing.md, width: '47%', elevation: 2, alignItems: 'center', justifyContent: 'center', minHeight: 56 },
+  quickBtnText:     { color: colors.primary, fontWeight: '600', fontSize: font.sm, textAlign: 'center' },
+  sectionTitle:     { fontSize: font.md, fontWeight: '700', color: colors.primary, marginBottom: spacing.sm },
+  tabsRow:          { flexDirection: 'row', gap: spacing.xs },
+  tab:              { paddingHorizontal: 14, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.bgLight, borderWidth: 1, borderColor: colors.border },
+  tabActive:        { backgroundColor: colors.primary, borderColor: colors.primary },
+  tabText:          { fontSize: font.sm, color: colors.textMuted, fontWeight: '600' },
+  tabTextActive:    { color: '#fff' },
+  candidateRow:     { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
+  candidateRowLeft: { flex: 1, marginRight: spacing.sm },
+  candidateRowName: { fontSize: font.base, color: colors.textDark, fontWeight: '600', marginBottom: 4 },
+  voteCount:        { fontSize: font.base, fontWeight: '700', color: colors.primary, width: 40, textAlign: 'right' },
+  insightHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
+  insightToggle:    { color: colors.secondary, fontWeight: '600', fontSize: font.base },
+  insightCard:      { backgroundColor: colors.accent, borderRadius: radius.md, padding: spacing.md, marginBottom: spacing.sm },
+  insightTitle:     { fontSize: font.base, fontWeight: '700', color: colors.primary, marginBottom: 4 },
+  insightStatus:    { fontSize: font.sm, color: colors.textDark, marginBottom: spacing.sm },
+  confLabel:        { fontSize: font.sm, color: colors.textMuted, marginBottom: 4 },
+});
+
+export default dashboardStyles;
