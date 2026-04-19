@@ -1,23 +1,38 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
-import {
-  ScrollView,
-  Text, TouchableOpacity,
-  View,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import api from '../api';
 import voteAnalysisStyles from '../constants/styles/voteAnalysisStyles';
 
 function VoteAnalysisScreen() {
-  const params = useLocalSearchParams();
-  const [submitted, setSubmitted] = useState(false);
+  const params  = useLocalSearchParams();
+  const [votes, setVotes]     = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  let votes = [];
-  try {
-    votes = params.votes ? JSON.parse(params.votes) : [];
-  } catch {
-    votes = [];
-  }
+  useEffect(() => {
+    // If coming from vote screen, use passed votes
+    if (params.votes) {
+      try {
+        setVotes(JSON.parse(params.votes));
+        setLoading(false);
+        return;
+      } catch { /* fall through to API */ }
+    }
+    // Otherwise fetch from backend
+    api.get('/vote/my/')
+      .then((res) => {
+        const formatted = res.data.map((v) => ({
+          position:      v.position,
+          candidateName: v.candidate_name,
+          candidateId:   v.candidate,
+        }));
+        setVotes(formatted);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
+  if (loading) return <ActivityIndicator size="large" style={{ marginTop: 80 }} />;
 
   if (votes.length === 0) {
     return (
@@ -32,45 +47,12 @@ function VoteAnalysisScreen() {
     );
   }
 
-  
-  if (submitted) {
-    return (
-      <View style={voteAnalysisStyles.successPage}>
-        <Text style={voteAnalysisStyles.successEmoji}>🎉</Text>
-        <Text style={voteAnalysisStyles.successTitle}>Vote Submitted!</Text>
-        <Text style={voteAnalysisStyles.successSub}>
-          Your votes have been recorded successfully. Thank you for participating!
-        </Text>
-        <View style={voteAnalysisStyles.successBadge}>
-          <Text style={voteAnalysisStyles.successBadgeText}>✅ {votes.length} positions voted</Text>
-        </View>
-        <TouchableOpacity
-          style={voteAnalysisStyles.btn}
-          onPress={() => router.replace('/student-dashboard')}
-        >
-          <Text style={voteAnalysisStyles.btnText}>Back to Dashboard</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-
   return (
     <ScrollView contentContainerStyle={voteAnalysisStyles.page}>
-
-
       <View style={voteAnalysisStyles.header}>
-        <Text style={voteAnalysisStyles.title}>🗳️ Review Your Votes</Text>
-        <Text style={voteAnalysisStyles.subtitle}>Please review before submitting</Text>
+        <Text style={voteAnalysisStyles.title}>🗳️ Your Vote Summary</Text>
+        <Text style={voteAnalysisStyles.subtitle}>Your votes have been recorded successfully</Text>
       </View>
-
-
-      <View style={voteAnalysisStyles.warningBanner}>
-        <Text style={voteAnalysisStyles.warningText}>
-          ⚠️ Once submitted, your votes cannot be changed.
-        </Text>
-      </View>
-
 
       <View style={voteAnalysisStyles.grid}>
         {votes.map((v) => (
@@ -81,29 +63,18 @@ function VoteAnalysisScreen() {
             </View>
             <Text style={voteAnalysisStyles.candidateName}>{v.candidateName}</Text>
             <View style={voteAnalysisStyles.checkBadge}>
-              <Text style={voteAnalysisStyles.checkText}>✅ Selected</Text>
+              <Text style={voteAnalysisStyles.checkText}>✅ Vote Recorded</Text>
             </View>
           </View>
         ))}
       </View>
 
-
-      <View style={voteAnalysisStyles.btnRow}>
-        <TouchableOpacity
-          style={voteAnalysisStyles.backBtn}
-          onPress={() => router.replace('/vote')}
-        >
-          <Text style={voteAnalysisStyles.backBtnText}>← Change Votes</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={voteAnalysisStyles.submitBtn}
-          onPress={() => setSubmitted(true)}
-        >
-          <Text style={voteAnalysisStyles.submitBtnText}>Confirm & Submit ✓</Text>
-        </TouchableOpacity>
-      </View>
-
+      <TouchableOpacity
+        style={voteAnalysisStyles.btn}
+        onPress={() => router.replace('/student-dashboard')}
+      >
+        <Text style={voteAnalysisStyles.btnText}>Back to Dashboard</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
