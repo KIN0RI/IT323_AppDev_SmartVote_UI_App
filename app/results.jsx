@@ -1,46 +1,44 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
-import {
-  ScrollView,
-  Text, TouchableOpacity,
-  View,
-} from 'react-native';
-import useCandidates from '../hooks/useCandidates';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import api from '../api';
 import resultsStyles from '../constants/styles/resultsStyles';
 import { spacing } from '../constants/theme';
 
 const positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor'];
 
 function ResultsScreen() {
-  const { candidates } = useCandidates();
-  const [activePosition, setActivePosition] = useState('President');
+  const [resultsByPosition, setResultsByPosition] = useState({});
+  const [activePosition,    setActivePosition]    = useState('President');
+  const [loading,           setLoading]           = useState(true);
 
-  const getWinner = (pos) => {
-    const group = candidates.filter((c) => c.position === pos);
-    return group.reduce((a, b) => (a.votes > b.votes ? a : b));
-  };
+  useEffect(() => {
+    api.get('/results/')
+      .then((res) => setResultsByPosition(res.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
-  const activeCandidates = candidates
-    .filter((c) => c.position === activePosition)
-    .sort((a, b) => b.votes - a.votes);
+  if (loading) return <ActivityIndicator size="large" style={{ marginTop: 80 }} />;
 
-  const totalVotes = activeCandidates.reduce((sum, c) => sum + c.votes, 0);
-  const winner = getWinner(activePosition);
+  const activeCandidates = resultsByPosition[activePosition] || [];
+  const totalVotes       = activeCandidates.reduce((sum, c) => sum + (c.vote_count || 0), 0);
+  const winner           = activeCandidates[0];
+  const getWinner        = (pos) => (resultsByPosition[pos] || [])[0];
 
   return (
     <ScrollView contentContainerStyle={resultsStyles.page}>
-  
       <View style={resultsStyles.header}>
         <Text style={resultsStyles.headerTitle}>🏆 Election Results</Text>
-        <Text style={resultsStyles.headerSub}>USTP Student Council Election 2026</Text>
+        <Text style={resultsStyles.headerSub}>USTP Student Council Election</Text>
       </View>
-
 
       <Text style={resultsStyles.sectionTitle}>🎉 Elected Officials</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.lg }}>
         <View style={resultsStyles.winnersRow}>
           {positions.map((pos) => {
             const w = getWinner(pos);
+            if (!w) return null;
             return (
               <View key={pos} style={resultsStyles.winnerCard}>
                 <Text style={resultsStyles.crown}>👑</Text>
@@ -48,8 +46,8 @@ function ResultsScreen() {
                   <Text style={resultsStyles.avatarText}>{w.name.charAt(0)}</Text>
                 </View>
                 <Text style={resultsStyles.winnerName} numberOfLines={1}>{w.name}</Text>
-                <Text style={resultsStyles.winnerPos} numberOfLines={1}>{pos}</Text>
-                <Text style={resultsStyles.winnerVotes}>{w.votes} votes</Text>
+                <Text style={resultsStyles.winnerPos}  numberOfLines={1}>{pos}</Text>
+                <Text style={resultsStyles.winnerVotes}>{w.vote_count || 0} votes</Text>
               </View>
             );
           })}
@@ -57,27 +55,22 @@ function ResultsScreen() {
       </ScrollView>
 
       <Text style={resultsStyles.sectionTitle}>📊 Detailed Results</Text>
-
-      
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
         <View style={resultsStyles.tabsRow}>
           {positions.map((pos) => (
-            <TouchableOpacity
-              key={pos}
+            <TouchableOpacity key={pos}
               style={[resultsStyles.tab, activePosition === pos && resultsStyles.tabActive]}
-              onPress={() => setActivePosition(pos)}
-            >
+              onPress={() => setActivePosition(pos)}>
               <Text style={[resultsStyles.tabText, activePosition === pos && resultsStyles.tabTextActive]}>{pos}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
 
-
       {activeCandidates.map((candidate, index) => {
-        const pct      = totalVotes > 0 ? Math.round((candidate.votes / totalVotes) * 100) : 0;
-        const isWinner = candidate.id === winner.id;
-
+        const votes    = candidate.vote_count || 0;
+        const pct      = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+        const isWinner = winner && candidate.id === winner.id;
         return (
           <View key={candidate.id} style={[resultsStyles.resultRow, isWinner && resultsStyles.resultRowWinner]}>
             <Text style={resultsStyles.rank}>{isWinner ? '👑' : `#${index + 1}`}</Text>
@@ -101,15 +94,17 @@ function ResultsScreen() {
                 <Text style={resultsStyles.pctText}>{pct}%</Text>
               </View>
             </View>
-            <Text style={resultsStyles.resultVotes}>{candidate.votes}</Text>
+            <Text style={resultsStyles.resultVotes}>{votes}</Text>
           </View>
         );
       })}
+      {activeCandidates.length === 0 && (
+        <Text style={{ textAlign: 'center', color: '#64748b', padding: 32 }}>No results yet.</Text>
+      )}
 
       <TouchableOpacity style={resultsStyles.backBtn} onPress={() => router.back()}>
         <Text style={resultsStyles.backBtnText}>← Go Back</Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 }
