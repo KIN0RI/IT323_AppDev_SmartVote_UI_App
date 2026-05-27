@@ -1,50 +1,63 @@
-# Welcome to your Expo app 👋
+# USTP SmartVote — Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+React Native mobile app for the USTP SmartVote student election system with face biometric verification.
 
-## Get started
+## Deployment
 
-1. Install dependencies
+| Platform | URL |
+|----------|-----|
+| Backend API | https://it323-appdev-smartvote-fastapi.onrender.com |
+| Android APK | Download from Expo EAS / included in submission |
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+| | |
+|-|-|
+| Framework | React Native 0.81, Expo SDK 54 |
+| Routing | Expo Router (file-based) |
+| HTTP | Axios |
+| Storage | AsyncStorage |
+| Camera | expo-camera |
+| Build | EAS Build |
 
-   ```bash
-   npx expo start
-   ```
+## Features
 
-In the output, you'll find options to open the app in a
+- Student login with email + face biometric verification
+- Admin login (goes directly to dashboard, no face verification)
+- Register face for biometric verification
+- Cast votes per position (President, VP, Secretary, Treasurer, Auditor)
+- View live election results
+- Admin dashboard — voter turnout, candidate tallies, voter log, election settings
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Local Development
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The app connects to `https://it323-appdev-smartvote-fastapi.onrender.com/api` by default.
 
-## Learn more
+For local backend, update `api.js`:
+```js
+const BASE_URL = 'http://<your-local-ip>:8001/api';
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Build APK (EAS)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+eas build --profile preview --platform android
+```
 
-## Join the community
+Download the APK from the Expo dashboard after the build completes.
 
-Join our community of developers creating universal apps.
+## Group Members
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Nepthalie Brynt R. Asinero
+- Dan Ivan E. Labin
+- Christian Paul L. Bahian
+- Ronald E. Yu
+
+## Course
+
+IT323 - Application Development and Emerging Technologies
