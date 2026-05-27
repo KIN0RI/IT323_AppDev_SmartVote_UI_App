@@ -28,7 +28,7 @@ function useFaceVerification() {
     setMessage('Verifying identity...');
 
     try {
-      const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.9 });
+      const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
       const imageBase64 = `data:image/jpeg;base64,${photo.base64}`;
 
       const response = await api.post('/face/verify/', { image: imageBase64 });

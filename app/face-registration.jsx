@@ -37,7 +37,7 @@ function FaceRegistrationScreen() {
 
   const handleCapture = async () => {
     try {
-      const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.9 });
+      const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
       setCapturedUri(photo.uri);
       setCapturedBase64(photo.base64);
       setStatus('captured');
