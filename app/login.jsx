@@ -37,12 +37,18 @@ function LoginScreen() {
     try {
       const res = await api.post('/auth/login-email/', { email, password });
       await AsyncStorage.setItem('access_token',  res.data.access);
-      await AsyncStorage.setItem('refresh_token', res.data.refresh);
       await AsyncStorage.setItem('userRole',      res.data.role);
       await AsyncStorage.setItem('full_name',     res.data.full_name);
       await AsyncStorage.setItem('student_id',    res.data.student_id);
-      router.replace('/face-verification');
+      if (res.data.role === 'admin') {
+        router.replace('/dashboard');
+      } else {
+        router.replace('/face-verification');
+      }
     } catch (err) {
+      console.log('FULL ERROR:', JSON.stringify(err.response?.data));
+      console.log('STATUS:', err.response?.status);
+      console.log('MESSAGE:', err.message);
       const msg = err.response?.data?.detail || 'Invalid email or password.';
       Alert.alert('Login Failed', msg);
     } finally {
@@ -108,5 +114,7 @@ function LoginScreen() {
     </ScrollView>
   );
 }
+
+
 
 export default LoginScreen;

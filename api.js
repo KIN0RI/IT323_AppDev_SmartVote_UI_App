@@ -1,14 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-// ⚠️ Change this to your computer's local IP address
-// Run 'ipconfig' in terminal and look for IPv4 Address
-// Example: http://192.168.1.5:8000/api
-const BASE_URL = 'http://192.168.1.5:8000/api';
+// Replace with your Render URL after backend is deployed
+const BASE_URL = 'https://it323-appdev-smartvote-fastapi.onrender.com/api';
 
 const api = axios.create({ baseURL: BASE_URL });
 
-// Attach token automatically to every request
+
 api.interceptors.request.use(async (config) => {
   const token = await AsyncStorage.getItem('access_token');
   if (token) {
@@ -17,7 +15,6 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-// Auto logout on 401
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
