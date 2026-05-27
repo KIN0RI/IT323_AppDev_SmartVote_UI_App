@@ -40,7 +40,11 @@ function LoginScreen() {
       await AsyncStorage.setItem('userRole',      res.data.role);
       await AsyncStorage.setItem('full_name',     res.data.full_name);
       await AsyncStorage.setItem('student_id',    res.data.student_id);
-      router.replace('/face-verification');
+      if (res.data.role === 'admin') {
+        router.replace('/dashboard');
+      } else {
+        router.replace('/face-verification');
+      }
     } catch (err) {
       console.log('FULL ERROR:', JSON.stringify(err.response?.data));
       console.log('STATUS:', err.response?.status);

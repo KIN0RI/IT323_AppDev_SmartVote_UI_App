@@ -13,6 +13,7 @@ export default function RootLayout() {
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
         <Stack.Screen name="face-verification" />
+        <Stack.Screen name="face-registration" />
         <Stack.Screen name="student-dashboard" />
         <Stack.Screen name="vote" />
         <Stack.Screen name="vote-analysis" />

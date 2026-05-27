@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.1.42:8001/api';  
+// Replace with your Render URL after backend is deployed
+const BASE_URL = 'https://it323-appdev-smartvote-fastapi.onrender.com/api';
 
 const api = axios.create({ baseURL: BASE_URL });
 
