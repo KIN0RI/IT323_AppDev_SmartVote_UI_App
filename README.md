@@ -31,17 +31,30 @@ React Native mobile app for the USTP SmartVote student election system with face
 
 ## Local Development
 
+**Prerequisites:** Node.js 18+, [Expo Go](https://expo.dev/go) app on your phone (or an Android/iOS emulator)
+
+1. Install dependencies:
 ```bash
 npm install
+```
+
+2. Start the dev server:
+```bash
 npx expo start
 ```
 
+3. Scan the QR code with **Expo Go** (Android) or the Camera app (iOS).
+
+   Or press `a` for Android emulator, `i` for iOS simulator, `w` for web browser.
+
 The app connects to `https://it323-appdev-smartvote-fastapi.onrender.com/api` by default.
 
-For local backend, update `api.js`:
+For a local backend, update `api.js`:
 ```js
 const BASE_URL = 'http://<your-local-ip>:8001/api';
 ```
+
+> Use your machine's local IP address (not `localhost`) so the device can reach the backend over the network.
 
 ## Build APK (EAS)
 
